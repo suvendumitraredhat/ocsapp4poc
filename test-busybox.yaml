@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: busybox-pv-claim
+  labels:
+    app: wordpress
+spec:
+  storageClassName: ocs-storagecluster-cephfs
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-busybox
+  labels:
+    app: wordpress
+    tier: busybox
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: busybox
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: busybox
+    spec:
+      containers:
+      - image: busybox
+        name: busybox
+        command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+        volumeMounts:
+        - name: busybox-persistent-storage
+          mountPath: /var/lib/busybox
+      volumes:
+      - name: busybox-persistent-storage
+        persistentVolumeClaim:
+          claimName: busybox-pv-claim
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress1-busybox
+  labels:
+    app: wordpress1
+    tier: busybox
+spec:
+  selector:
+    matchLabels:
+      app: wordpress1
+      tier: busybox
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress1
+        tier: busybox
+    spec:
+      containers:
+      - image: busybox
+        name: busybox
+        command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+        volumeMounts:
+        - name: busybox-persistent-storage
+          mountPath: /var/lib/busybox
+      volumes:
+      - name: busybox-persistent-storage
+        persistentVolumeClaim:
+          claimName: busybox-pv-claim
+
+
