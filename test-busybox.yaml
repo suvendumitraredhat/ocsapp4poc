@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: busybox-pv-claim
   labels:
-    app: wordpress
+    app: myapp
 spec:
   storageClassName: ocs-storagecluster-cephfs
   accessModes:
@@ -15,21 +15,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress-busybox
+  name: myapp-busybox
   labels:
-    app: wordpress
+    app: myapp
     tier: busybox
 spec:
   selector:
     matchLabels:
-      app: wordpress
+      app: myapp
       tier: busybox
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
+        app: myapp
         tier: busybox
     spec:
       containers:
@@ -48,21 +48,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress1-busybox
+  name: myapp1-busybox
   labels:
-    app: wordpress1
+    app: myapp1
     tier: busybox
 spec:
   selector:
     matchLabels:
-      app: wordpress1
+      app: myapp1
       tier: busybox
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress1
+        app: myapp1
         tier: busybox
     spec:
       containers:
