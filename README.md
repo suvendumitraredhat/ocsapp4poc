@@ -37,4 +37,5 @@ oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{
 
 ## In case daemon crash
 ceph crash ls
+
 ceph crash rm <> 
