@@ -34,3 +34,7 @@ oc get nodes | grep worker | cut -d' ' -f1 | while read worker_node; do oc label
 
 ## Enable ceph toolbox
 oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'
+
+## In case daemon crash
+ceph crash ls
+ceph crash rm <> 
