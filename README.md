@@ -11,11 +11,13 @@ oc new-project test
 oc get pvc 
 oc get pod
 oc create -f ocs-operator/mysql.yaml
+
 ## RWX Example:
 oc new-app openshift/php:7.3~https://github.com/christianh814/openshift-php-upload-demo --name=file-uploader
 oc expose svc file-uploader
 oc get route
 oc set volume deployment file-uploader --add --name=my-shared-storage -t pvc --claim-mode=ReadWriteMany --claim-size=5Gi --claim-name=my-shared-storage --mount-path=/opt/app-root/src/uploaded --claim-class=ocs-storagecluster-cephfs
+
 ## OBC example: 
 git clone https://github.com/ksingh7/openshift-photo-album-app.git
 oc adm policy add-scc-to-user anyuid -z default -n test
@@ -39,3 +41,8 @@ oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{
 ceph crash ls
 
 ceph crash rm <> 
+
+## OCS Debugging
+oc get events --sort-by='{.lastTimestamp}' -n openshift-storage
+
+oc logs rook-ceph-osd-0-7d67d6bfd4-f49jb -n openshift-storage -f
