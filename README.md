@@ -46,3 +46,6 @@ ceph crash rm <>
 oc get events --sort-by='{.lastTimestamp}' -n openshift-storage
 
 oc logs rook-ceph-osd-0-7d67d6bfd4-f49jb -n openshift-storage -f
+
+## Fillup ODF rbd application
+dd if=/dev/zero of=/var/lib/pgsql/data/fill.up bs=1M count=38500
