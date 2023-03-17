@@ -34,8 +34,11 @@ oc -n openshift-machine-api scale machinesets xxxxxxxx --replicas=2
 ## Label nodes for OCS and then "Add Capacity" to OCS cluster
 oc get nodes | grep worker | cut -d' ' -f1 | while read worker_node; do oc label nodes $worker_node cluster.ocs.openshift.io/openshift-storage='';done
 
-## Enable ceph toolbox
-oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'
+## Access Ceph command
+oc rsh -n openshift-storage $(oc get pods -n openshift-storage -o name -l app=rook-ceph-operator)
+export CEPH_ARGS='-c /var/lib/rook/openshift-storage/openshift-storage.config'
+ https://access.redhat.com/articles/4870821
+#oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'
 
 ## In case daemon crash
 ceph crash ls
