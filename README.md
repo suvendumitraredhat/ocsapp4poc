@@ -36,8 +36,11 @@ oc get nodes | grep worker | cut -d' ' -f1 | while read worker_node; do oc label
 
 ## Access Ceph command
 oc rsh -n openshift-storage $(oc get pods -n openshift-storage -o name -l app=rook-ceph-operator)
+
 export CEPH_ARGS='-c /var/lib/rook/openshift-storage/openshift-storage.config'
- https://access.redhat.com/articles/4870821
+
+https://access.redhat.com/articles/4870821
+
 #oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'
 
 ## In case daemon crash
