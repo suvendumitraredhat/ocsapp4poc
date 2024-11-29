@@ -1,23 +1,28 @@
-## Access Ceph command
+## Access Ceph command https://access.redhat.com/articles/4870821
 oc rsh -n openshift-storage $(oc get pods -n openshift-storage -o name -l app=rook-ceph-operator)
+
 sh-5.1$ export CEPH_ARGS='-c /var/lib/rook/openshift-storage/openshift-storage.config'
+
 sh-5.1$ **ceph osd tree**
-ID  CLASS  WEIGHT   TYPE NAME                  STATUS  REWEIGHT  PRI-AFF
--1         1.17178  root default                                        
--3         0.39059      host compact-master-0                           
- 0    ssd  0.39059          osd.0                  up   1.00000  1.00000
--5         0.39059      host compact-master-1                           
- 1    ssd  0.39059          osd.1                  up   1.00000  1.00000
--7         0.39059      host compact-master-2                           
- 2    ssd  0.39059          osd.2                  up   1.00000  1.00000
+
 **#List mapping ceph osd to disk drive**
+
 sh-5.1$ **ceph device ls**
+
 DEVICE                     HOST:DEV                                                        DAEMONS            WEAR  LIFE EXPECTANCY
+
 ATA_QEMU_HARDDISK_QM00001  compact-master-0:sda compact-master-1:sda compact-master-2:sda  osd.0 osd.1 osd.2                       
 
 **sh-5.1$ceph df**
+
+**sh-5.1$ ceph osd pool ls detail**
+
+**sh-5.1$ ceph config dump**
+
 https://access.redhat.com/articles/4870821
+
 Link - https://www.redhat.com/en/blog/10-commands-every-ceph-administrator-should-know
+
 
 # ocsapp4poc
 OCS App for PoC
