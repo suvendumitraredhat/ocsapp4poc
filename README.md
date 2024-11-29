@@ -1,3 +1,24 @@
+## Access Ceph command
+oc rsh -n openshift-storage $(oc get pods -n openshift-storage -o name -l app=rook-ceph-operator)
+sh-5.1$ export CEPH_ARGS='-c /var/lib/rook/openshift-storage/openshift-storage.config'
+sh-5.1$ **ceph osd tree**
+ID  CLASS  WEIGHT   TYPE NAME                  STATUS  REWEIGHT  PRI-AFF
+-1         1.17178  root default                                        
+-3         0.39059      host compact-master-0                           
+ 0    ssd  0.39059          osd.0                  up   1.00000  1.00000
+-5         0.39059      host compact-master-1                           
+ 1    ssd  0.39059          osd.1                  up   1.00000  1.00000
+-7         0.39059      host compact-master-2                           
+ 2    ssd  0.39059          osd.2                  up   1.00000  1.00000
+**#List mapping ceph osd to disk drive**
+sh-5.1$ **ceph device ls**
+DEVICE                     HOST:DEV                                                        DAEMONS            WEAR  LIFE EXPECTANCY
+ATA_QEMU_HARDDISK_QM00001  compact-master-0:sda compact-master-1:sda compact-master-2:sda  osd.0 osd.1 osd.2                       
+
+**sh-5.1$ceph df**
+https://access.redhat.com/articles/4870821
+Link - https://www.redhat.com/en/blog/10-commands-every-ceph-administrator-should-know
+
 # ocsapp4poc
 OCS App for PoC
 
@@ -34,14 +55,6 @@ oc -n openshift-machine-api scale machinesets xxxxxxxx --replicas=2
 ## Label nodes for OCS and then "Add Capacity" to OCS cluster
 oc get nodes | grep worker | cut -d' ' -f1 | while read worker_node; do oc label nodes $worker_node cluster.ocs.openshift.io/openshift-storage='';done
 
-## Access Ceph command
-oc rsh -n openshift-storage $(oc get pods -n openshift-storage -o name -l app=rook-ceph-operator)
-
-export CEPH_ARGS='-c /var/lib/rook/openshift-storage/openshift-storage.config'
-
-https://access.redhat.com/articles/4870821
-
-#oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'
 
 ## In case daemon crash
 ceph crash ls
